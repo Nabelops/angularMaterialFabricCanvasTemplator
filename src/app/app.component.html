@@ -1,111 +1,111 @@
 <!-- <div fxLayout="column"> -->
-  <mat-toolbar color="primary">
+  <mat-toolbar color="primary" class="mat-toolbar-single-row">
     <span>Card Designer</span>
   </mat-toolbar>
-  <mat-toolbar class="mat-elevation-z4" fxLayout="row" fxLayoutAlign="space-between center">
-    <button mat-icon-button (click)="align('left')"><mat-icon class="material-icons-outlined">format_align_left</mat-icon></button>
-    <button mat-icon-button (click)="align('center')"><mat-icon class="material-icons-outlined">format_align_center</mat-icon></button>
-    <button mat-icon-button (click)="align('right')"><mat-icon class="material-icons-outlined">format_align_right</mat-icon></button>
-    <button mat-icon-button (click)="process_align('left')"><mat-icon class="material-icons-outlined">align_horizontal_left</mat-icon></button>
-    <button mat-icon-button (click)="process_align('right')"><mat-icon class="material-icons-outlined">align_horizontal_right</mat-icon></button>
-    <button mat-icon-button (click)="process_align('top')"><mat-icon class="material-icons-outlined">align_vertical_top</mat-icon></button>
-    <button mat-icon-button (click)="process_align('bottom')"><mat-icon class="material-icons-outlined">align_vertical_bottom</mat-icon></button>
-    <button mat-icon-button (click)="process_align('hoizontal-center')"><mat-icon class="material-icons-outlined">align_horizontal_center</mat-icon></button>
-    <button mat-icon-button (click)="process_align('vertical-center')"><mat-icon class="material-icons-outlined">align_vertical_center</mat-icon></button>
-    <button mat-icon-button (click)="process_align('distribute-horizontal')"><mat-icon class="material-icons-outlined">horizontal_distribute</mat-icon></button>
-    <button mat-icon-button (click)="process_align('distribute-vertical')"><mat-icon class="material-icons-outlined">vertical_distribute</mat-icon></button>
-    <button mat-icon-button (click)="centerHorizontalPage()" matBadge="P" matBadgePosition="after"><mat-icon class="material-icons-outlined">align_horizontal_center</mat-icon></button>
-    <button mat-icon-button (click)="centerVerticalPage()" matBadge="P" matBadgePosition="after"><mat-icon class="material-icons-outlined">align_vertical_center</mat-icon></button>
+  <mat-toolbar class="mat-elevation-z4 mat-toolbar-single-row" fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-icon-button (click)="align('left')" [disabled]="!this.canvas?.getActiveObjects()?.length"><mat-icon class="material-icons-outlined">format_align_left</mat-icon></button>
+    <button mat-icon-button (click)="align('center')" [disabled]="!this.canvas?.getActiveObjects()?.length"><mat-icon class="material-icons-outlined">format_align_center</mat-icon></button>
+    <button mat-icon-button (click)="align('right')" [disabled]="!this.canvas?.getActiveObjects()?.length"><mat-icon class="material-icons-outlined">format_align_right</mat-icon></button>
+    <button mat-icon-button (click)="process_align('left')" [disabled]="(this.canvas?.getActiveObjects()?.length || 0) < 2"><mat-icon class="material-icons-outlined">align_horizontal_left</mat-icon></button>
+    <button mat-icon-button (click)="process_align('right')" [disabled]="(this.canvas?.getActiveObjects()?.length || 0) < 2"><mat-icon class="material-icons-outlined">align_horizontal_right</mat-icon></button>
+    <button mat-icon-button (click)="process_align('top')" [disabled]="(this.canvas?.getActiveObjects()?.length || 0) < 2"><mat-icon class="material-icons-outlined">align_vertical_top</mat-icon></button>
+    <button mat-icon-button (click)="process_align('bottom')" [disabled]="(this.canvas?.getActiveObjects()?.length || 0) < 2"><mat-icon class="material-icons-outlined">align_vertical_bottom</mat-icon></button>
+    <button mat-icon-button (click)="process_align('hoizontal-center')" [disabled]="(this.canvas?.getActiveObjects()?.length || 0) < 2"><mat-icon class="material-icons-outlined">align_horizontal_center</mat-icon></button>
+    <button mat-icon-button (click)="process_align('vertical-center')" [disabled]="(this.canvas?.getActiveObjects()?.length || 0) < 2"><mat-icon class="material-icons-outlined">align_vertical_center</mat-icon></button>
+    <button mat-icon-button (click)="process_align('distribute-horizontal')" [disabled]="(this.canvas?.getActiveObjects()?.length || 0) < 2"><mat-icon class="material-icons-outlined">horizontal_distribute</mat-icon></button>
+    <button mat-icon-button (click)="process_align('distribute-vertical')" [disabled]="(this.canvas?.getActiveObjects()?.length || 0) < 2"><mat-icon class="material-icons-outlined">vertical_distribute</mat-icon></button>
+    <button mat-icon-button (click)="centerHorizontalPage()" [disabled]="!this.canvas?.getActiveObjects()?.length"><mat-icon class="material-icons-outlined">align_horizontal_center</mat-icon></button>
+    <button mat-icon-button (click)="centerVerticalPage()" [disabled]="!this.canvas?.getActiveObjects()?.length"><mat-icon class="material-icons-outlined">align_vertical_center</mat-icon></button>
   </mat-toolbar>
-  <div class="container mat-typography" fxFlex fxLayout="column" fxLayoutAlign="start center">
-    <div
-      gdAreas="image canvas font | cust canvas fontSize | save canvas fontColor"
-      gdColumns="auto 600px auto"
-      gdGap="20px"
-      fxFlex
-      >
-      <div gdArea="image">
-        <mat-card class="mat-elevation-z4" fxFlex fxLayout="column">
-          <h4><strong>Template File</strong></h4>
-          <p>File must be a 6x4 png file with 300 dpi resolution (1800 x 1200 px).</p>
-          <p *ngIf="isBadImport" class="warn-color">!! File is not correct dimensions</p>
-          <input #fileUpload hidden type="file" accept=".png" (change)="onFileSelect($event)" onclick="this.value=null">
-          <div *ngIf="file" fxLayout="row" fxLayoutAlign="start center">
-            <p class="no-bottom-margin"><strong>{{file.name}}</strong></p>
-            <div fxFlex></div>
-            <button mat-icon-button (click)="onClearFile()"><mat-icon class="material-icons-outlined">clear</mat-icon></button>
-          </div>
-          <button *ngIf="!isParsing" mat-raised-button color="primary" (click)="fileUpload.click()">
-            <mat-icon class="material-icons-outlined">upload_file</mat-icon>
-            Select PNG
-          </button>
-        </mat-card>
-      </div>
-      <div gdArea="cust">
-        <mat-card class="mat-elevation-z4" fxFlex fxLayout="column">
-        </mat-card>
-      </div>
-      <div gdArea="save">
-        <mat-card class="mat-elevation-z4" fxFlex fxLayout="column">
-          <mat-slide-toggle formControlName="includeToFrom">Include To & From</mat-slide-toggle>
-          <div fxFlex="1em"></div>
-          <mat-progress-bar
-            *ngIf="isSubmitting"
-            mode="indeterminate">
-          </mat-progress-bar>
-          <button [disabled]="isSubmitting || !cardForm.valid" mat-raised-button color="primary" (click)="onSaveTemplate()">
-            <mat-icon class="material-icons-outlined">save_as</mat-icon>
-            Save
-          </button>
-          <div fxFlex="16px"></div>
-          <button mat-raised-button color="primary" (click)="onDownload()">
-            <mat-icon class="material-icons-outlined">download</mat-icon>
-            Download
-          </button>
-        </mat-card>
-      </div>
-      <div gdArea="canvas">
-        <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
-          <p>Message length: 300 characters</p>
-          <canvas #myCanvas width="600" height="400" class="mat-elevation-z4"></canvas>
+  <form fxFlex [formGroup]="cardForm">
+    <div class="container mat-typography" fxFlex fxLayout="column" fxLayoutAlign="start center">
+      <div
+        gdAreas="image canvas font | save canvas fontColor"
+        gdColumns="auto 600px auto"
+        gdGap="20px"
+        fxFlex
+        >
+        <div gdArea="image">
+          <mat-card class="mat-elevation-z4" fxFlex fxLayout="column" fxLayoutAlign="center">
+            <h4><strong>Template File</strong></h4>
+            <p>File must be a 6x4 png file with 300 dpi resolution (1800 x 1200 px).</p>
+            <p *ngIf="isBadImport" class="warn-color">!! File is not the correct dimensions</p>
+            <input #fileUpload hidden type="file" accept=".png" (change)="onFileSelect($event)" onclick="this.value=null">
+            <div *ngIf="file" fxLayout="row" fxLayoutAlign="start center">
+              <p class="no-bottom-margin"><strong>{{file.name}}</strong></p>
+              <div fxFlex></div>
+              <button mat-icon-button (click)="onClearFile()"><mat-icon class="material-icons-outlined">clear</mat-icon></button>
+            </div>
+            <button *ngIf="!isParsing" mat-raised-button color="primary" (click)="fileUpload.click()">
+              <mat-icon class="material-icons-outlined">upload_file</mat-icon>
+              Select PNG
+            </button>
+          </mat-card>
         </div>
+        <div gdArea="save">
+          <mat-card class="mat-elevation-z4" fxFlex fxLayout="column" fxLayoutAlign="center">
+            <mat-slide-toggle formControlName="includeToFrom">Include To & From</mat-slide-toggle>
+            <div fxFlex="1em"></div>
+            <mat-progress-bar
+              *ngIf="isSubmitting"
+              mode="indeterminate">
+            </mat-progress-bar>
+            <div fxFlex="16px"></div>
+            <button mat-raised-button color="primary" (click)="onDownload()">
+              <mat-icon class="material-icons-outlined">download</mat-icon>
+              Download
+            </button>
+          </mat-card>
+        </div>
+        <div gdArea="canvas">
+          <div fxFlex fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
+            <p>Message length: 300 characters</p>
+            <canvas #myCanvas width="600" height="400" class="mat-elevation-z4"></canvas>
+          </div>
+        </div>
+        <div gdArea="font">
+          <mat-card class="mat-elevation-z4" fxFlex fxLayout="column" fxLayoutAlign="center">
+            <h4><strong>Font</strong></h4>
+            <p>You can choose from any google font available.  See them
+              <a href="https://fonts.google.com/" target="_blank">here</a>
+            </p>
+            <mat-form-field *ngIf="fonts$ |async as fonts" appearance="outline">
+              <mat-label>Selected font</mat-label>
+              <mat-select [compareWith]="fontCompare" formControlName="fontFamily" name="font">
+                <mat-option *ngFor="let font of fonts" [value]="font" >
+                  {{font.family}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-card>
+        </div>
+        <div gdArea="fontColor">
+          <mat-card class="mat-elevation-z4" fxFlex fxLayout="column"  fxLayoutAlign="center">
+            <h4><strong>Size</strong></h4>
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>FontSize</mat-label>
+              <input matInput type="number" formControlName="fontSize">
+            </mat-form-field>
+            <h4><strong>Color</strong></h4>
+            <mat-form-field appearance="outline">
+              <input matInput [ngxMatColorPicker]="picker" formControlName="fontColor">
+              <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
+              <ngx-mat-color-picker #picker [color]="color"></ngx-mat-color-picker>
+            </mat-form-field>
+          </mat-card>
+        </div>
+        <!-- <div gdArea="fontColor">
+          <mat-card fxFlex fxLayout="column">
+            <h4><strong>Color</strong></h4>
+            <mat-form-field appearance="outline">
+              <input matInput [ngxMatColorPicker]="picker" formControlName="fontColor">
+              <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
+              <ngx-mat-color-picker #picker [color]="color"></ngx-mat-color-picker>
+            </mat-form-field>
+          </mat-card>
+        </div> -->
       </div>
-      <div gdArea="font">
-        <mat-card class="mat-elevation-z4" fxFlex fxLayout="column">
-          <h4><strong>Font</strong></h4>
-          <p>You can choose from any google font available.  See them
-            <a href="https://fonts.google.com/" target="_blank">here</a>
-          </p>
-          <mat-form-field *ngIf="fonts$ |async as fonts" appearance="outline" fxFlex>
-            <mat-label>Selected font</mat-label>
-            <mat-select [compareWith]="fontCompare" formControlName="fontFamily" name="font">
-              <mat-option *ngFor="let font of fonts" [value]="font" >
-                {{font.family}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-card>
-      </div>
-      <div gdArea="fontSize">
-        <mat-card class="mat-elevation-z4" fxFlex fxLayout="column">
-          <h4><strong>Size</strong></h4>
-          <mat-form-field class="example-full-width" appearance="outline" fxFlex>
-            <mat-label>FontSize</mat-label>
-            <input matInput type="number" formControlName="fontSize">
-          </mat-form-field>
-        </mat-card>
-      </div>
-      <div gdArea="fontColor">
-        <mat-card fxFlex fxLayout="column">
-          <h4><strong>Color</strong></h4>
-          <mat-form-field appearance="outline">
-            <!-- <input matInput [ngxMatColorPicker]="picker" formControlName="fontColor">
-            <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
-            <ngx-mat-color-picker #picker [color]="color"></ngx-mat-color-picker> -->
-        </mat-form-field>
-        </mat-card>
-      </div>
+    
     </div>
-  
-  </div>
+  </form>
 <!-- </div> -->

@@ -16,6 +16,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MAT_COLOR_FORMATS, NgxMatColorPickerModule, NGX_MAT_COLOR_FORMATS } from '@angular-material-components/color-picker';
 
 @NgModule({
   declarations: [
@@ -36,10 +38,14 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatFormFieldModule,
     MatSelectModule,
     MatProgressBarModule,
+    MatSlideToggleModule,
+    NgxMatColorPickerModule,
     AppRoutingModule,
     
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
